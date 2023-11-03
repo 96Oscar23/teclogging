@@ -1,0 +1,72 @@
+.is-invalid {
+    display: none;
+    width: 100%;
+    margin-top: .25rem;
+    font-size: .875em;
+    color: #ed4c78
+}
+
+.input-group-merge.is-invalid {
+    border: 0.0625rem solid #ed4c78;
+}
+
+.smalltable {
+    font-size: 10pt !important;
+}
+
+
+thead tr th {
+    /*border-bottom: 1pt solid black !important;*/
+    font-weight: 900 !important;
+}
+
+
+
+tfoot tr th {
+    font-weight: 900 !important;
+}
+
+.dt-buttons{
+    display: none !important;
+}
+
+.dataTables_filter{
+    display: none !important;
+}
+
+
+/* Para quitar las dobles flechas de los datagrids*/
+
+table.dataTable thead .sorting {
+    background-image: none !important;
+}
+
+table.dataTable thead .sorting_asc {
+    background-image: none !important;
+}
+
+table.dataTable thead .sorting_desc {
+    background-image: none !important;
+}
+
+table.dataTable thead .sorting_asc_disabled {
+    background-image: none !important;
+}
+
+table.dataTable thead .sorting_desc_disabled {
+    background-image: none !important;
+}
+
+.icono_descarga
+{
+    font-size: 1.875rem;
+}
+
+.today:not(.selected)  {
+    background: #89b3ff99 !important;
+}
+
+
+.form_error{
+    border: 1px solid #ed4c78;
+}
