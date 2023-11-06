@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+
+<style>
+    #sortable-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .sortable-item {
+        background-color: #3498db;
+        color: #fff;
+        text-align: center;
+        line-height: 40px;
+        margin: 5px;
+        cursor: grab;
+    }
+</style>
+
+
+<div class="card">
+
+    <div class="card-header bg-light">
+
+        <div class="row align-items-center">
+            <div class="col">
+                <h1 class="page-header-title">Tipo Datos
+                    <!-- <a class="btn btn-primary btn-xs" >
+                        <i class="bi-plus"></i>
+                    </a> -->
+                </h1>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <h1>Arrastra y Suelta</h1>
+        <ul id="sortable-list">
+            <li class="sortable-item">Elemento 1</li>
+            <li class="sortable-item">Elemento 2</li>
+            <li class="sortable-item">Elemento 3</li>
+            <li class="sortable-item">Elemento 4</li>
+        </ul>
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block script %}
+
+<script>
+
+    jQuery(document).ready(function () {
+        $("#sortable-list").sortable();
+        $("#sortable-list").disableSelection();
+    })
+
+</script>
+
+{% endblock %}

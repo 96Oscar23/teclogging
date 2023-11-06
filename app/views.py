@@ -13,10 +13,12 @@ import os
 from app.controller.auth.auth import authc
 from app.controller.dashboard.dashboard import dashboard
 from app.controller.usuario.usuario import usuario
+from app.controller.tipodato.tipodato import tipodato
 
 app.register_blueprint(authc)
 app.register_blueprint(dashboard)
 app.register_blueprint(usuario)
+app.register_blueprint(tipodato)
 
 def id_generator(size=32, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.SystemRandom().choice(chars) for _ in range(size))
