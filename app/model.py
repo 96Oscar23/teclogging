@@ -13,106 +13,214 @@ from dateutil.relativedelta import relativedelta
 import uuid
 
 
-#*empresausuariorol 
-class EmpresaUsuarioRol(db.Model):
-    __tablename__ = 'empresausuariorol'
+class TipoFuenteDatoMapa(db.Model):
+    __tablename__ = 'tipofuentedatomapa'
     id = Column(db.Integer, primary_key=True)
-    empresaid= Column(Integer, db.ForeignKey('empresa.id'),nullable=False)
-    empresa = relationship("Empresa",foreign_keys=[empresaid])
-    usuarioid= Column(Integer, db.ForeignKey('usuario.id'),nullable=False)
-    usuario = relationship("Usuario",foreign_keys=[usuarioid])
-    rolid= Column(Integer, db.ForeignKey('rol.id'),nullable=False)
-    rol = relationship("Rol",foreign_keys=[rolid])
-    fecha_creacion=Column(db.TIMESTAMP,server_default=db.func.current_timestamp())
-    deleted = Column(db.Boolean,server_default='f', default=False)
-    fecha_deleted = Column(db.TIMESTAMP,nullable=True)
-    def __init__(self,empresaid,usuarioid, rolid):
-        self.empresaid = empresaid
-        self.rolid = rolid
-        self.usuarioid = usuarioid
-       
-    def add(self,usuariorol):
-        db.session.add(usuariorol)
-        return session_commit()
- 
-    def update(self):
-        return session_commit()
- 
-    def delete(self,usuariorol):
-        db.session.delete(usuariorol)
-        return session_commit()  
 
-# *Empresa
-class Empresa(db.Model):
-    __tablename__ = 'empresa'
-    id = Column(db.Integer, primary_key=True)
-    uuid = db.Column(UUID(as_uuid=True), unique=True, server_default=sqlalchemy.text("uuid_generate_v4()"))
-    nombre = Column(db.String(250), nullable=False)
-    codigo = Column(db.String(10), nullable=True)
-    empresaid = Column(Integer, db.ForeignKey('empresa.id'), nullable=True)
-    empresa = relationship("Empresa", foreign_keys=[empresaid])
-    tipoempresaid = Column(Integer, db.ForeignKey(
-        'tipoempresa.id'), nullable=False)
-    tipoempresa = relationship("TipoEmpresa", foreign_keys=[tipoempresaid])
-    direccion = Column(db.String(250), nullable=True)
-    logo = Column(db.String(250), nullable=True)
+    uuid = db.Column(UUID(as_uuid=True), unique=True,
+                     server_default=sqlalchemy.text("uuid_generate_v4()"))
+    tipofuentedatoid = Column(Integer, db.ForeignKey(
+        'tipofuentedato.id'), nullable=True)
+    tipofuentedato = relationship(
+        "TipoFuenteDato", foreign_keys=[tipofuentedatoid])
+    metrica = Column(Integer, db.ForeignKey('metrica.id'), nullable=True)
+    metricaid = relationship("Metrica", foreign_keys=[metrica])
+    tipovariable = Column(Integer, db.ForeignKey(
+        'tipovariable.id'), nullable=True)
+    tipovariableid = relationship("TipoVariable", foreign_keys=[tipovariable])
+    inicio = Column(db.String(255), nullable=True)
+    fin = Column(db.String(255), nullable=True)
     fecha_creacion = Column(
         db.TIMESTAMP, server_default=db.func.current_timestamp())
     deleted = Column(db.Boolean, server_default='0', default=False)
-    # Se agrega la siguiente columna por si se modifica el registro y asi avisar pymePOS
-    modificacion = Column(db.TIMESTAMP)
+
+    def __init__(self, tipofuentedatoid, metricaid, tipovariableid, inicio, fin):
+        self.tipofuentedatoid = tipofuentedatoid
+        self.metricaid = metricaid
+        self.tipovariableid = tipovariableid
+        self.inicio = inicio
+        self.fin = fin
+
+    def add(self, tipofuentedatomapa):
+        db.session.add(tipofuentedatomapa)
+        return session_commit()
+
+    def update(self):
+        return session_commit()
+
+    def delete(self, tipofuentedatomapa):
+        db.session.delete(tipofuentedatomapa)
+        return session_commit()
+
+
+class TipoVariable(db.Model):
+    __tablename__ = 'tipovariable'
+    id = Column(db.Integer, primary_key=True)
+    uuid = db.Column(UUID(as_uuid=True), unique=True,
+                     server_default=sqlalchemy.text("uuid_generate_v4()"))
+
+    nombre = Column(db.String(255), nullable=False)
+    codigo = Column(db.String(255), nullable=False)
+    descripcion = Column(db.String(255), nullable=True)
+    longitud = Column(db.Integer, nullable=True)
+    fecha_creacion = Column(
+        db.TIMESTAMP, server_default=db.func.current_timestamp())
+    deleted = Column(db.Boolean, server_default='0', default=False)
+
+    def __init__(self, nombre, codigo, descripcion, longitud):
+        self.nombre = nombre
+        self.codigo = codigo
+        self.descripcion = descripcion
+        self.longitud = longitud
+
+    def add(self, tipo):
+        db.session.add(tipo)
+        return session_commit()
+
+    def update(self):
+        return session_commit()
+
+    def delete(self, tipo):
+        db.session.delete(tipo)
+        return session_commit()
+
+
+class Metrica(db.Model):
+    __tablename__ = 'metrica'
+    id = Column(db.Integer, primary_key=True)
+    nombre = Column(db.String(255), nullable=False)
+    codigo = Column(db.String(255), nullable=False)
+    descripcion = Column(db.String(255), nullable=True)
+    fecha_creacion = Column(
+        db.TIMESTAMP, server_default=db.func.current_timestamp())
+    deleted = Column(db.Boolean, server_default='0', default=False)
+    unidadmedida = Column(Integer, db.ForeignKey(
+        'unidadmedida.id'), nullable=True)
+    unidadmedidaid = relationship("UniadMedida", foreign_keys=[unidadmedida])
+
+    def __init__(self, nombre, codigo, descripcion, unidadmedidaid):
+        self.nombre = nombre
+        self.codigo = codigo
+        self.descripcion = descripcion
+        self.unidadmedidaid = unidadmedidaid
+
+    def add(self, metrica):
+        db.session.add(metrica)
+        return session_commit()
+
+    def update(self):
+        return session_commit()
+
+    def delete(self, metrica):
+        db.session.delete(metrica)
+        return session_commit()
+
+
+class UniadMedida(db.Model):
+    __tablename__ = 'unidadmedida'
+    id = Column(db.Integer, primary_key=True)
+
+    uuid = db.Column(UUID(as_uuid=True), unique=True,
+                     server_default=sqlalchemy.text("uuid_generate_v4()"))
+    nombre = Column(db.String(255), nullable=False)
+    codigo = Column(db.String(255), nullable=False)
+    descripcion = Column(db.String(255), nullable=True)
+    simbolo = Column(db.String(255), nullable=True)
+    fecha_creacion = Column(
+        db.TIMESTAMP, server_default=db.func.current_timestamp())
+    deleted = Column(db.Boolean, server_default='0', default=False)
     fecha_deleted = Column(db.TIMESTAMP, nullable=True)
 
-    def __init__(self, nombre, empresaid, tipoempresaid, direccion, logo):
+    def __init__(self, nombre, codigo, descripcion, simbolo):
         self.nombre = nombre
-        self.empresaid = empresaid
-        self.tipoempresaid = tipoempresaid
-        self.direccion = direccion
-        self.logo = logo
-        
+        self.codigo = codigo
+        self.descripcion = descripcion
+        self.simbolo = simbolo
 
-    def add(self, empresa):
-        empresa.modificacion = datetime.utcnow()
-        db.session.add(empresa)
+    def add(self, unidadmedida):
+        db.session.add(unidadmedida)
         return session_commit()
 
     def update(self):
-        self.modificacion = datetime.utcnow()
         return session_commit()
 
-    def delete(self, empresa):
-        db.session.delete(empresa)
+    def delete(self, unidadmedida):
+        db.session.delete(unidadmedida)
         return session_commit()
 
-# *TipoEmpresa 1 empresa , 2 cliente, 3 proveedor, 4 empresa sucursal, 5 cliente sucursal, 6 proveedor sucursal
-class TipoEmpresa(db.Model):
-    __tablename__ = 'tipoempresa'
+
+class TipoFuenteDato(db.Model):
+    __tablename__ = 'tipofuentedato'
     id = Column(db.Integer, primary_key=True)
-    uuid = db.Column(UUID(as_uuid=True), unique=True, server_default=sqlalchemy.text("uuid_generate_v4()"))
+
+    uuid = db.Column(UUID(as_uuid=True), unique=True,
+                     server_default=sqlalchemy.text("uuid_generate_v4()"))
     nombre = Column(db.String(255), nullable=False)
+    codigo = Column(db.String(255), nullable=False)
+    direccion = Column(db.String(255), nullable=True)
+    puerto = Column(db.String(255), nullable=True)
+    fecha_creacion = Column(
+        db.TIMESTAMP, server_default=db.func.current_timestamp())
+    deleted = Column(db.Boolean, server_default='0', default=False)
+    tipodato = Column(db.Integer, db.ForeignKey(
+        'tipodato.id'), nullable=True)
+    tipodatoid = relationship("TipoDato", foreign_keys=[tipodato])
+
+    def __init__(self, nombre, codigo, direccion, puerto, tipodatoid):
+        self.nombre = nombre
+        self.codigo = codigo
+        self.direccion = direccion
+        self.puerto = puerto
+        self.tipodatoid = tipodatoid
+
+    def add(self, tipofuentedato):
+        db.session.add(tipofuentedato)
+        return session_commit()
+
+    def update(self):
+        return session_commit()
+
+    def delete(self, tipofuentedato):
+        db.session.delete(tipofuentedato)
+        return session_commit()
+
+# *
+
+
+class TipoDato(db.Model):
+    __tablename__ = 'tipodato'
+    id = Column(db.Integer, primary_key=True)
+
+    uuid = db.Column(UUID(as_uuid=True), unique=True,
+                     server_default=sqlalchemy.text("uuid_generate_v4()"))
+    nombre = Column(db.String(255), nullable=False)
+    codigo = Column(db.String(255), nullable=False)
     fecha_creacion = Column(
         db.TIMESTAMP, server_default=db.func.current_timestamp())
     deleted = Column(db.Boolean, server_default='0', default=False)
 
-    def __init__(self, nombre):
+    def __init__(self, nombre, codigo):
         self.nombre = nombre
+        self.codigo = codigo
 
-    def add(self, tipoempresa):
-        db.session.add(tipoempresa)
+    def add(self, tipodatos):
+        db.session.add(tipodatos)
         return session_commit()
 
     def update(self):
         return session_commit()
 
-    def delete(self, tipoempresa):
-        db.session.delete(tipoempresa)
+    def delete(self, tipodatos):
+        db.session.delete(tipodatos)
         return session_commit()
+
 
 # *usuario usuarios del sistema
 class Usuario(db.Model):
     __tablename__ = 'usuario'
     id = Column(db.Integer, primary_key=True)
-    uuid = db.Column(UUID(as_uuid=True), unique=True, server_default=sqlalchemy.text("uuid_generate_v4()"))
+    uuid = db.Column(UUID(as_uuid=True), unique=True,
+                     server_default=sqlalchemy.text("uuid_generate_v4()"))
     nombre = Column(db.String(255), nullable=False)
     correo = Column(db.String(255), nullable=False)
     password = Column(db.String(255), nullable=False)
@@ -124,14 +232,9 @@ class Usuario(db.Model):
     ultimo_login = Column(db.TIMESTAMP)
     rolid = Column(Integer, db.ForeignKey('rol.id'), nullable=True)
     rol = relationship("Rol", foreign_keys=[rolid])
-    empresaloginid= Column(Integer, db.ForeignKey('empresa.id'),nullable=True) #ultima empresa a la que se logeo
-    empresalogin = relationship("Empresa",foreign_keys=[empresaloginid])
     fecha_creacion = Column(
         db.TIMESTAMP, server_default=db.func.current_timestamp())
     deleted = Column(db.Boolean, server_default='0', default=False)
-    fecha_deleted = Column(db.TIMESTAMP, nullable=True)
-    # Se agrega la siguiente columna por si se modifica el registro y asi avisar pymePOS
-    modificacion = Column(db.TIMESTAMP)
 
     def __init__(self, nombre, correo, password, token_registro, validado, correo_registro, activo, rolid):
 
@@ -143,7 +246,6 @@ class Usuario(db.Model):
         self.correo_registro = correo_registro
         self.activo = activo
         self.rolid = rolid
-        
 
     def add(self, usuario):
         usuario.modificacion = datetime.utcnow()
@@ -168,13 +270,13 @@ class Usuario(db.Model):
         return pwd_context.verify(password, self.password)
 
     def generate_auth_token(self, expiration=86400):
-        
-        #s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+
+        # s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
         token = jwt.encode(
             {
                 "confirm": self.id,
                 "exp": datetime.utcnow()
-                       + relativedelta(seconds=expiration)
+                + relativedelta(seconds=expiration)
             },
             key=app.config['SECRET_KEY'],
             algorithm="HS256"
@@ -182,44 +284,48 @@ class Usuario(db.Model):
 
         if isinstance(token, bytes):
             token = token.decode('utf-8')
-        #print ("tocen generado",token)
-        #print ("token generado",token)
-        #print(jwt.decode(token,key=app.config['SECRET_KEY'],algorithm="HS256"))
+        # print ("tocen generado",token)
+        # print ("token generado",token)
+        # print(jwt.decode(token,key=app.config['SECRET_KEY'],algorithm="HS256"))
         return token
 
     @staticmethod
     def verify_auth_token(token):
-        #print('verify_auth_token',token)
-        #s = Serializer(app.config['SECRET_KEY'])
+        # print('verify_auth_token',token)
+        # s = Serializer(app.config['SECRET_KEY'])
         try:
-            #data = s.loads(token)
+            # data = s.loads(token)
             data = jwt.decode(
                 token,
                 app.config['SECRET_KEY'],
                 "HS256"
             )
-            #print("data",data)
+            # print("data",data)
         except:
-            #rint("error verify_auth_token")
+            # rint("error verify_auth_token")
             return None    # valid token, but expired
-        #print ("verify_auth_token",data.get('confirm'))
-        #if data.get('confirm') != self.id:
+        # print ("verify_auth_token",data.get('confirm'))
+        # if data.get('confirm') != self.id:
         #    return False
         user = Usuario.query.get(data.get('confirm'))
         return user
+
     def serialize(self):
         return {
-            "id"    : self.id,
-            "uuid"  : self.uuid,
+            "id": self.id,
+            "uuid": self.uuid,
             "nombre": self.nombre
 
         }
 
 # *RolMenu
+
+
 class RolMenu(db.Model):
     __tablename__ = 'rolmenu'
     id = Column(db.Integer, primary_key=True)
-    uuid = db.Column(UUID(as_uuid=True), unique=True, server_default=sqlalchemy.text("uuid_generate_v4()"))
+    uuid = db.Column(UUID(as_uuid=True), unique=True,
+                     server_default=sqlalchemy.text("uuid_generate_v4()"))
     rolid = Column(Integer, db.ForeignKey('rol.id'), nullable=True)
     rol = relationship("Rol", foreign_keys=[rolid])
     menuid = Column(Integer, db.ForeignKey('menu.id'), nullable=True)
@@ -244,10 +350,13 @@ class RolMenu(db.Model):
         return session_commit()
 
 # *ROL
+
+
 class Rol(db.Model):
     __tablename__ = 'rol'
     id = Column(db.Integer, primary_key=True)
-    uuid = db.Column(UUID(as_uuid=True), unique=True, server_default=sqlalchemy.text("uuid_generate_v4()"))
+    uuid = db.Column(UUID(as_uuid=True), unique=True,
+                     server_default=sqlalchemy.text("uuid_generate_v4()"))
     nombre = Column(db.String(255), nullable=False)
     fecha_creacion = Column(
         db.TIMESTAMP, server_default=db.func.current_timestamp())
@@ -268,10 +377,13 @@ class Rol(db.Model):
         return session_commit()
 
 # *menu
+
+
 class Menu(db.Model):
     __tablename__ = 'menu'
     id = Column(db.Integer, primary_key=True)
-    uuid = db.Column(UUID(as_uuid=True), unique=True, server_default=sqlalchemy.text("uuid_generate_v4()"))
+    uuid = db.Column(UUID(as_uuid=True), unique=True,
+                     server_default=sqlalchemy.text("uuid_generate_v4()"))
     nombre = Column(db.String(255), nullable=False)
     descripcion = Column(db.String(255), nullable=True)
 
@@ -286,15 +398,15 @@ class Menu(db.Model):
         db.TIMESTAMP, server_default=db.func.current_timestamp())
     deleted = Column(db.Boolean, server_default='0', default=False)
 
-    def __init__(self, nombre, opcionpadreid, url, urlpython, menu, icono, orden,descripcion):
-        self.nombre        = nombre
+    def __init__(self, nombre, opcionpadreid, url, urlpython, menu, icono, orden, descripcion):
+        self.nombre = nombre
         self.opcionpadreid = opcionpadreid
-        self.url           = url
-        self.urlpython     = urlpython
-        self.menu          = menu
-        self.icono         = icono
-        self.orden         = orden
-        self.descripcion   = descripcion
+        self.url = url
+        self.urlpython = urlpython
+        self.menu = menu
+        self.icono = icono
+        self.orden = orden
+        self.descripcion = descripcion
 
     def add(self, marca):
         db.session.add(marca)
@@ -312,11 +424,10 @@ class Menu(db.Model):
 class Configuracion(db.Model):
     __tablename__ = 'configuracion'
     id = Column(db.Integer, primary_key=True)
-    uuid = db.Column(UUID(as_uuid=True), unique=True, server_default=sqlalchemy.text("uuid_generate_v4()"))
+    uuid = db.Column(UUID(as_uuid=True), unique=True,
+                     server_default=sqlalchemy.text("uuid_generate_v4()"))
     nombre = Column(db.String(255), nullable=False)
     valor = Column(db.String(255), nullable=False)
-    empresaid = Column(Integer, db.ForeignKey('empresa.id'), nullable=True)
-    empresa = relationship("Empresa", foreign_keys=[empresaid])
     fecha_creacion = Column(
         db.TIMESTAMP, server_default=db.func.current_timestamp())
     deleted = Column(db.Boolean, server_default='0', default=False)
@@ -338,9 +449,10 @@ class Configuracion(db.Model):
         db.session.delete(configuracion)
         return session_commit()
 
+
 def session_commit():
     try:
         db.session.commit()
     except SQLAlchemyError as e:
         reason = str(e)
-        #print(reason)
+        # print(reason)

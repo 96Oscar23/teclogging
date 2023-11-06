@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+  <!-- Content -->
+  <div class="content container-fluid">
+    <div class="row justify-content-center align-items-sm-center py-sm-10">
+      <div class="col-9 col-sm-6 col-lg-4">
+        <div class="text-center text-sm-end me-sm-4 mb-5 mb-sm-0">
+          <img class="img-fluid" src="/static/documents/logoempresas/logo_ift_horizontal2.png" alt="Image Description" data-hs-theme-appearance="default">
+          <img class="img-fluid" src="/static/documents/logoempresas/logo_ift_horizontal2.png" alt="Image Description" data-hs-theme-appearance="dark">
+        </div>
+      </div>
+      <!-- End Col -->
+
+      <div class="col-sm-6 col-lg-4 text-center text-sm-start">
+        <h1 class="display-1 mb-0">404</h1>
+        <p class="lead">{{ title if title != None else "Lo sentimos no se encontró la página" }}</p>
+        <a class="btn btn-primary" href="{{ redirectUrl }}">Regresasr</a>
+      </div>
+      <!-- End Col -->
+    </div>
+    <!-- End Row -->
+  </div>
+  <!-- End Content -->
+{% endblock %}

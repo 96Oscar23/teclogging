@@ -1,0 +1,75 @@
+﻿{% extends 'layout_login.html' %}
+
+{% block content %}
+<form method="post" action="" id="admin-form" name="admin-form" class="js-validate">
+    <input type="hidden" id="offset" name="offset" />
+
+
+
+    <div class="mb-4">
+        <label class="form-label" for="useremail">Correo</label>
+        <input class="form-control form-control-lg" name="useremail" id="useremail" tabindex="1" placeholder="Correo"
+            aria-label="Correo" required>
+
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label w-100" for="loginpassword">
+            <span class="d-flex justify-content-between align-items-center">
+                <span>Contraseña</span>
+            </span>
+        </label>
+
+        <div class="input-group input-group-merge" data-hs-validation-validate-class>
+            <input tabindex="2" type="password" class="js-toggle-password form-control form-control-lg"
+                name="loginpassword" id="loginpassword" placeholder="Contraseña" aria-label="Contrasena"
+                data-hs-toggle-password-options='{
+                    "target": "#changePassTarget",
+                    "defaultClass": "bi-eye-slash",
+                    "showClass": "bi-eye",
+                    "classChangeTarget": "#changePassIcon"
+                }' required>
+            <a id="changePassTarget" tabindex="-1" class="input-group-append input-group-text" href="javascript:;">
+                <i id="changePassIcon" class="bi-eye"></i>
+            </a>
+        </div>
+
+
+    </div>
+
+    <div class="d-grid mb-4">
+        <button tabindex="3" type="submit" class="btn btn-primary btn-lg">Iniciar sesión</button>
+    </div>
+
+    <div class="mb-4 float-end">
+        <a class="form-label" href="{{url_for('recuperar')}}"> Recuperar Contraseña</a>
+    </div>
+
+
+</form>
+
+{% endblock %}
+
+
+{% block script %}
+
+<script>
+    jQuery(document).ready(function () {
+        var d = new Date();
+        var n = d.getTimezoneOffset();
+        $('#offset').val(n);
+        $("#useremail").focus();
+
+        new HSTogglePassword('.js-toggle-password');
+
+
+        let div_error = $("#div_error").val();
+
+        if (div_error != null) {
+            alerta("Error", div_error, "danger");
+        }
+    });
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Header  -->
+<div class="page-header">
+    <div class="row align-items-end">
+        <div class="col-sm mb-2 mb-sm-0">
+            <h1 class="page-header-title">
+                {{extras.accion}} Menu
+            </h1>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" action="" id="admin-form" class="js-validate">
+            <div class="row">
+                <div class="col-mb-6 col-lg-6">
+
+
+
+                    <div>
+                        <label class="form-label" for="useremail">Nombre</label>
+                        <input class="form-control form-control-lg" name="nombre" id="nombre" aria-label="nombre"
+                            value="{{ menu.nombre }}" required>
+                    </div>
+                    <div>
+                        <label for="opcionpadre" class="form-label">Opción padre</label>
+                        <select id="opcionpadre" name="opcionpadre" class="form-select">
+                            <option value="-1" selected="">[Seleccionar]</option>
+                            {% for opciones in opcionesMenu %}
+                            <option value="{{opciones.id}}" {{ "selected" if opciones.id==menu.opcionpadreuuid }}>
+                                {{ opciones.nombre }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="url" class="form-label">URL</label>
+                        <input type="text" class="form-control  form-control-lg" id="url" name="url"
+                            value="{{ menu.url if menu.url != None }}">
+                    </div>
+                    <div>
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control form-control-lg" id="descripcion"
+                            name="descripcion">{{ menu.descripcion if menu.descripcion != None }}</textarea>
+                    </div>
+
+                </div>
+                <div class="col-mb-6 col-lg-6">
+                    <div>
+                        <label for="icono" class="form-label">Icono</label>
+                        <input type="text" class="form-control  form-control-lg" id="icono" name="icono"
+                            value="{{ menu.icono }}">
+                    </div>
+
+                    <div>
+                        <label for="orden" class="form-label">Orden</label>
+                        <input type="number" class="form-control  form-control-lg" id="orden" name="orden"
+                            value="{{ menu.orden }}">
+                    </div>
+                    <div>
+                        <label for="urlpython" class="form-label">URL Python</label>
+                        <div class="form-check form-switch mb-4">
+                            <input type="checkbox" class="form-check-input" id="urlpython" name="urlpython" {{ "checked"
+                                if menu.urlpython }}>
+                            <label class="form-check-label" for="urlpython"></label>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="menu" class="form-label">Mostrar en Menú</label>
+
+                        <div class="form-check form-switch mb-4">
+                            <input type="checkbox" class="form-check-input" id="menu" name="menu" {{ "checked" if
+                                menu.menu }}>
+                            <label class="form-check-label" for="menu"></label>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="my-3">
+                <a type="submit" href="{{ url_for('menu.menu_index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
+                <button type="submit" class="btn btn-primary btn-sm">Aceptar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

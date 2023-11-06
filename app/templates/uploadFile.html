@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-body">
+
+        <form method="post" action="{{ urlPost }}" id="admin-form" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="">Importante:</h2> 
+
+                    <ul class="text-dark">
+                        <li>El archivo que se va a cargar debe tener la estructura y tipo de datos que corresponde al archivo de <span class="text-uppercase">{{ title }}</span> definido por el IFT.</li>
+                        <li>Solo se soportan archivos de tipo CSV.</li>
+                        <li>Si se cargan archivos de un trimestre y año ya cargado previamente, se sobreescribirán los datos para dicho periodo con los nuevos datos.</li>
+                    </ul>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="hidden" id="fileId" name="fileId" class="d-none" value="{{ fileID }}">
+                            <div class="mb-2">
+                                <label for="opcionpadre" class="form-label">Trimestre:</label>
+                                <div class="input-group input-group-merge input-group-hover-light">
+                                    <div class="input-group-prepend input-group-text">
+                                        <i class="bi-calendar2-week"></i>
+                                    </div>
+                                    <select id="opcionpadre" name="opcionpadre" class="form-select">
+                                        <option value="-1" selected="">Seleccione el trimestre</option>
+        
+                                        <option value="1">Q1</option>
+                                        <option value="2">Q2</option>
+                                        <option value="3">Q3</option>
+                                        <option value="4">Q4</option>
+                                    </select>
+                                </div>
+        
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <label for="year" class="form-label">Año:</label>
+                                <div class="input-group input-group-merge input-group-hover-light">
+                                    <div class="input-group-prepend input-group-text" id="yearAddOn">
+                                        <i class="bi-calendar-date"></i>
+                                    </div>
+                                    <input type="number" class="form-control form-control-lg just_numbers" id="year" name="year"
+                                        placeholder="Ingrese el año" aria-label="Año seleccionado" aria-describedby="yearAddOn" min="2010" max="2099">
+                                </div>
+        
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <span class="divider-center my-3">Cargar archivo</span>
+                    
+
+
+                    <div class="mb-2">
+                        <label for="basicFormFile" class="js-file-attach form-label" data-hs-file-attach-options='{
+                            "textTarget": "[for=\"customFile\"]"
+                           }'>Seleccionar archivo</label>
+                        <div class="row d-flex align-items-center">
+                            <input class="form-control" type="file" id="inputFile" accept="csv" name="file"
+                                   data-url="{{ urlFetch }}" onclick="clearInputFile()" onchange="showLoadingFile()" disabled>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <br>
+            <div class="float-end">
+                <a href="{{ url_for('menu_index')}}" class="btn btn-danger btn-lg">Cancelar</a>
+                <button type="submit" class="btn btn-primary btn-lg" id="buttonSubmiteFile" disabled>Aceptar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% include 'tableLogCargaArchivos/tabla.html' %}
+
+
+<!-- Modal Loading carga-->
+<div id="modalLoaderFile" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLoaderFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title" id="modalLoaderFileTitle">Cargando y analizando archivo</h1>
+            </div>
+            <div class="modal-body text-center">
+                <h2 class="fw-bold">Cargando el archivo, no cerrar la ventana</h2>
+                <br>
+                <div class="container-fluid">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-md-4">
+                            <h3 class="fw-bolder">Validando archivo <span id="titleFile"></span></h3>
+                            <div class="col text-center">
+                                <div class="spinner-border text-success display-2" role="status" id="modalLoaderFileUpload">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h4 class="fw-bold text-center">Progreso del archivo</h4>
+                            <div class="my-5">
+                                <h4 class="fw-bold">Carga de archivo</h4>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar bg-info" id="loadingBarFile" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="my-5">
+                                <h4 class="fw-bold">Validacion del tipo de archivo</h4>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar bg-info" id="loadingBarFileFormat" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="my-5">
+                                <h4 class="fw-bold">Validacion de cabeceras</h4>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar bg-info" id="loadingBarHeader" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="my-5">
+                                <h4 class="fw-bold">Validacion de datos</h4>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar bg-info" id="loadingBarBody" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white d-none" data-bs-dismiss="modal" id="buttonLoadingModal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
+
+<!-- Modal Archivo correcto-->
+<div id="modalLoaderValidate" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLoaderValidateTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modalLoaderValidateTitle">Archivo validado con exito</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <h1>El archivo es válido, puede continuar con la carga</h1>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
+<!-- Modal Archivo correcto-->
+<div id="modalCargandoArchivo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalCargandoArchivoTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modalCargandoArchivoTitle">Subiendo archivo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <h1 class="fw-bold">Subiendo archivo no cerrar el navegador</h1>
+                <div class="col">
+                    <div class="spinner-border text-success display-2" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
+
+<!-- Modal Archivo correcto-->
+<div id="modalArchivoValidado" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalArchivoValidadoTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modalArchivoValidadoTitle">Archivo validado con éxito</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <i class="bi bi-check text-success display-1 text-center my-2"></i>
+                <h1 class="fw-bold">El archivo cumple los parámetros establecidos.</h1>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Continuar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
+<!-- Modal Archivo correcto-->
+<div id="modalArchivoErroneo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalArchivoErroneoTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modalArchivoErroneoTitle">El archivo contiene errores</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <i class="bi bi-x-lg text-danger display-1 text-center my-2"></i>
+                <h1 class="fw-bold">El archivo contiene errores de formato.</h1>
+                <h3>Revisar el archivo antes de continuar.</h3>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Continuar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+<!-- Listado de errores  -->
+<script src="/static/errorList.js"></script>
+
+<script src="/static/validacion.js"></script>
+
+
+{% endblock %}

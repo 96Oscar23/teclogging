@@ -1,0 +1,22 @@
+{% extends 'layout_login.html' %}
+
+{% block content %}
+
+<div class="mb-4">
+    {{ extras.titulo2 }} <br><br>
+    {{ extras.msn }}
+</div>
+ 
+{% endblock %}
+
+
+{% block script %}
+
+<script>
+    (function() {
+        //Mostrar la contrasena
+        new HSTogglePassword('.js-toggle-password')
+    })();
+</script>
+    
+{% endblock %}

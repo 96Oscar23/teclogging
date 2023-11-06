@@ -1,0 +1,17 @@
+{% extends 'layout_login.html' %}
+
+{% block content %}
+
+<div class="mb-4">
+    <label class="form-label" for="useremail">Correo</label>
+    <input type="email" class="form-control form-control-lg" name="useremail" id="useremail"
+        tabindex="1" placeholder="Correo" aria-label="Correo"
+        required>
+    <span class="invalid-feedback">Por favor ingrese una dirección de correo válida</span>
+</div>
+
+<div class="d-grid">
+    <button type="submit" class="btn btn-primary btn-lg">Aceptar</button>
+</div>
+ 
+{% endblock %}

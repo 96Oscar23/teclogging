@@ -1,0 +1,163 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Header  -->
+<div class="page-header">
+    <div class="row align-items-end">
+        <div class="col-sm mb-2 mb-sm-0">
+            <h1 class="page-header-title">
+                {{extras.accion}} Usuario
+            </h1>
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" action="" id="admin-form" class="js-validate">
+            <div class="row">
+                <div class="col-mb-6 col-lg-6">
+
+                    <input type="hidden" value="{{usuario.uuid}}" id="usuarioid" />
+
+                    <div>
+                        <label class="form-label" for="useremail">Nombre</label>
+                        <input class="form-control form-control-lg" name="nombre" id="nombre" tabindex="1"
+                            aria-label="nombre" value="{{ usuario.nombre }}" required>
+                    </div>
+                    <div>
+                        <label class="form-label" for="useremail">Correo</label>
+                        <input class="form-control form-control-lg" name="useremail" id="useremail" tabindex="2"
+                            aria-label="useremail" value="{{ usuario.correo }}" required>
+                    </div>
+                    <div>
+                        <label for="rolid" class="form-label">Rol</label>
+                        <select id="rolid" name="rolid" class="form-select" tabindex="3">
+                            <option value="-1" selected="">[Seleccionar]</option>
+                            {% for rol in roles %}
+                            <option value="{{rol.uuid}}" {{ "selected" if rol.uuid==usuario.rolid }}>
+                                {{ rol.nombre }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+
+                </div>
+                <div class="col-mb-6 col-lg-6">
+
+
+
+                    <div>
+                        <label for="activo" class="form-label">Activo</label>
+
+                        <div class="form-check form-switch mb-4">
+                            <input type="checkbox" class="form-check-input" id="activo" tabindex="4" name="activo"
+                                {{ "checked" if usuario.activo }}>
+                            <label class="form-check-label" for="activo"></label>
+                        </div>
+                    </div>
+
+                    {%if usuario.id==None%}
+                    <div>
+                        <label class="form-label w-100" for="contrasena">
+                            <span class="d-flex justify-content-between align-items-center">
+                                <span>Contraseña</span>
+                            </span>
+                        </label>
+
+                        <div class="input-group input-group-merge" data-hs-validation-validate-class>
+                            <input tabindex="5" type="password" class="js-toggle-password form-control form-control-lg"
+                                name="contrasena" id="contrasena" aria-label="Contrasena"
+                                data-hs-toggle-password-options='{
+                                "target": "#changePassTarget",
+                                "defaultClass": "bi-eye-slash",
+                                "showClass": "bi-eye",
+                                "classChangeTarget": "#changePassIcon"
+                            }' required>
+                            <a id="changePassTarget" tabindex="-1" class="input-group-append input-group-text"
+                                href="javascript:;">
+                                <i id="changePassIcon" class="bi-eye"></i>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <label class="form-label" for="password" tabindex="0">
+                            <span class="d-flex justify-content-between align-items-center">
+                                <span>Confirmar Contraseña</span>
+                            </span>
+                        </label>
+                        <div class="input-group input-group-merge" data-hs-validation-validate-class>
+                            <input type="password" class="js-toggle-password form-control form-control-lg"
+                                name="confirmar" id="confirmar" tabindex="6" aria-label="Contrasena Actual" required
+                                minlength="8" data-hs-toggle-password-options='{
+                            "target": "#confirmar_changePassTarget",
+                            "defaultClass": "bi-eye-slash",
+                            "showClass": "bi-eye",
+                            "classChangeTarget": "#confirmar_changePassIcon"
+                            }' required>
+                            <a id="confirmar_changePassTarget" class="input-group-append input-group-text"
+                                href="javascript:;">
+                                <i id="confirmar_changePassIcon" class="bi-eye"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                    {%endif%}
+
+
+                </div>
+            </div>
+
+            <div class="my-3">
+                <a type="submit" href="{{ url_for('usuario.usuario_index')}}"
+                    class="btn btn-secondary btn-sm">Cancelar</a>
+                <button type="submit" class="btn btn-primary btn-sm">Aceptar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+
+<script>
+    jQuery(document).ready(function () {
+
+        $('body').on('blur', '#useremail', function (e) {
+            var usuarioid = $("#usuarioid").val();
+            var correo = $("#useremail").val();
+            dat = JSON.stringify({ correo: correo });
+
+            if (usuarioid == "None") {
+                $.ajax({
+                    url: "/usuario/validacorreo",
+                    type: "POST",
+                    data: dat,
+                    contentType: 'application/json',
+                    dataType: "json",
+                    success: function (msg) {
+                        var data = [];
+                        if (msg.estatus == 'error') {
+                            $("#useremail").val("");
+                            alerta("Error", "Ya existe un usuario con el correo ingresado.", "danger");
+
+                            return false;
+
+                        }
+
+
+
+
+                    }
+                });
+
+
+            }
+        });
+    });
+</script>
+{% endblock %}

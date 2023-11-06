@@ -1,0 +1,77 @@
+{% extends "layout_login.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <form method="post" action="" id="admin-form">
+            <div class="row">
+                <div class="col">
+                    <label class="form-label" for="password" tabindex="0">
+                        <span class="d-flex justify-content-between align-items-center">
+                            <span>Nueva Contraseña</span>
+                        </span>
+                    </label>
+                
+                    <div class="input-group input-group-merge" data-hs-validation-validate-class>
+                        <input type="password" class="js-toggle-password form-control form-control-lg"
+                            name="newpassword" id="newpassword" placeholder="Nueva Contrasena"
+                            aria-label="Nueva Contrasena" required minlength="8"
+                            data-hs-toggle-password-options='{
+                                "target": "#nueva_changePassTarget",
+                                "defaultClass": "bi-eye-slash",
+                                "showClass": "bi-eye",
+                                "classChangeTarget": "#nueva_changePassIcon"
+                                }' required>
+                        <a id="nueva_changePassTarget" class="input-group-append input-group-text"
+                            href="javascript:;">
+                            <i id="nueva_changePassIcon" class="bi-eye"></i>
+                        </a>
+                    </div>
+                    <span class="invalid-feedback">Por favor ingresa una contraseña válida.</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label class="form-label" for="password" tabindex="0">
+                        <span class="d-flex justify-content-between align-items-center">
+                            <span>Confirmar Contraseña</span>
+                        </span>
+                    </label>
+                    <div class="input-group input-group-merge" data-hs-validation-validate-class>
+                        <input type="password" class="js-toggle-password form-control form-control-lg"
+                            name="repeatpassword" id="repeatpassword" placeholder="Confirmar Contrasena"
+                            aria-label="Confirmar Contrasena" required minlength="8"
+                            data-hs-toggle-password-options='{
+                                "target": "#confirmar_changePassTarget",
+                                "defaultClass": "bi-eye-slash",
+                                "showClass": "bi-eye",
+                                "classChangeTarget": "#confirmar_changePassIcon"
+                                }' required>
+                        <a id="confirmar_changePassTarget" class="input-group-append input-group-text"
+                            href="javascript:;">
+                            <i id="confirmar_changePassIcon" class="bi-eye"></i>
+                        </a>
+                    </div>
+                    <span class="invalid-feedback">Por favor ingresa una contraseña válida.</span>
+                </div>
+            </div>
+            <div class="my-3">
+                <button type="submit" class="btn btn-primary btn-lg">Aceptar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="/static/assets/vendor/hs-toggle-password/dist/js/hs-toggle-password.js"></script>
+
+<script>
+    (function() {
+        //Mostrar la contrasena
+        new HSTogglePassword('.js-toggle-password')
+    })();
+</script>
+    
+{% endblock %}

@@ -1,0 +1,248 @@
+﻿{% extends "base.html" %}
+
+{% block button %}
+
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header bg-light">
+        <div class="row align-items-center">
+
+            <!-- Titulo y boton + -->
+            <div class="col">
+                <h1 class="page-header-title">{{extras.titulo}}
+                    <a class="btn btn-primary btn-xs" href="{{ url_for('usuario.usuario_add') }}">
+                        <i class="bi-plus"></i>
+                    </a>
+                </h1>
+            </div>
+            <div class="col-auto" id="tabla1Header">
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="card-body">
+
+        <!-- Tabla -->
+        <div class="table-responsive datatable-custom">
+            <table id="datatable"
+                class="table table-borderless table-striped table-thead-bordered table-nowrap table-hover">
+                <thead>
+                    <tr class="bg-dark">
+                        <th class="text-white">Nombre</th>
+                        <th class="text-white">Correo</th>
+                        <th class="text-white">Rol</th>
+                        <th class="text-white">Activo</th>
+
+                        <th class="no-link last no-sort columna-bototnes"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.nombre }}</td>
+                        <td>{{ usuario.correo if usuario.correo != None }}</td>
+                        <td>{{ usuario.rol }}</td>
+                        <td>
+                            {% if usuario.activo %}
+                            <span class="badge bg-soft-success text-success">Activo</span>
+                            {% else %}
+                            <span class="badge bg-soft-danger text-danger">Inactivo</span>
+                            {% endif %}
+
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{{ url_for('usuario.usuario_update', id = usuario.uuid) }}" type="button"
+                                    class="btn btn-primary btn-xs">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#confirmarBorrado" type="button"
+                                    objetoid="{{usuario.uuid}}" objeto="{{extras.objeto}}" nombre="{{usuario.nombre}}"
+                                    class="btn btn-danger btn-xs btn-borrado">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#cambiarPassword" type="button"
+                                    objetoid="{{usuario.uuid}}" nombre="{{usuario.nombre}}"
+                                    class="btn btn-warning btn-xs btn-cambiar text-white">
+                                    <i class="bi bi-lock"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+
+    <!-- Num Registros y paginacion -->
+    <div class="card-footer">
+        <div id="tabla1Footer">
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="cambiarPassword" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning p-4">
+                <input type="hidden" id="cambiarID">
+
+
+                <h5 class="modal-title text-white" id="exampleModalLabel">Cambiar Contrasena</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span>Cambiar Contrasena usuario: <b id="cambiarNombre"></b></span>
+
+                <form method="post" action="" id="admin-form" class="js-validate">
+                    <div>
+                        <label class="form-label w-100" for="contrasena">
+                            <span class="d-flex justify-content-between align-items-center">
+                                <span>Contraseña</span>
+                            </span>
+                        </label>
+
+                        <div class="input-group input-group-merge" data-hs-validation-validate-class>
+                            <input tabindex="5" type="password" class="js-toggle-password form-control form-control-lg"
+                                name="contrasena" id="contrasena" aria-label="Contrasena"
+                                data-hs-toggle-password-options='{
+                        "target": "#changePassTarget",
+                        "defaultClass": "bi-eye-slash",
+                        "showClass": "bi-eye",
+                        "classChangeTarget": "#changePassIcon"
+                    }' required>
+                            <a id="changePassTarget" tabindex="-1" class="input-group-append input-group-text"
+                                href="javascript:;">
+                                <i id="changePassIcon" class="bi-eye"></i>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <label class="form-label" for="password" tabindex="0">
+                            <span class="d-flex justify-content-between align-items-center">
+                                <span>Confirmar Contraseña</span>
+                            </span>
+                        </label>
+                        <div class="input-group input-group-merge" data-hs-validation-validate-class>
+                            <input type="password" class="js-toggle-password form-control form-control-lg"
+                                name="confirmar" id="confirmar" tabindex="6" aria-label="Contrasena Actual" required
+                                minlength="8" data-hs-toggle-password-options='{
+                    "target": "#confirmar_changePassTarget",
+                    "defaultClass": "bi-eye-slash",
+                    "showClass": "bi-eye",
+                    "classChangeTarget": "#confirmar_changePassIcon"
+                    }' required>
+                            <a id="confirmar_changePassTarget" class="input-group-append input-group-text"
+                                href="javascript:;">
+                                <i id="confirmar_changePassIcon" class="bi-eye"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning text-white" onclick="cambiarPassword();">
+                    <span class="spinner-border spinner-border-sm cargando" role="status" aria-hidden="true"></span>
+                    Cambiar Contrasena</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block script %}
+
+<script>
+    jQuery(document).ready(function () {
+        iniciarTabla("#tabla1Header", "datatable", "#tabla1Footer");
+
+
+        $('body').on('click', '.btn-cambiar', function (e) {
+
+            var objetoid = $(this).attr("objetoid");
+            var nombre = $(this).attr("nombre");
+            $("#contrasena").val('');
+            $("#confirmar").val('');
+            $(".input-group").removeClass("is-invalid");
+            $("#cambiarID").val(objetoid);
+            $("#cambiarNombre").text(nombre);
+            var validator = $("#admin-form").validate();
+            validator.resetForm();
+
+        });
+    });
+    function cambiarPassword() {
+        if ($("#admin-form").valid()) {
+            //
+            var usuarioid = $("#cambiarID").val();
+            var password = $("#contrasena").val();
+            dat = JSON.stringify({ usuarioid: usuarioid, password: password });
+
+            $(".cargando").show();
+            $('.btn').attr('disabled', 'disabled');
+            $.ajax({
+                url: "/usuario/cambiarpassword",
+                type: "POST",
+                data: dat,
+                contentType: 'application/json',
+                dataType: "json",
+                success: function (data) {
+
+
+                    //cargamos la tabla sucursales
+                    if (data.estatus == "ok") {
+
+                        $('#cambiarPassword').appendTo("body").modal('hide');
+                        alerta("Aviso", data.msn, "success");
+
+                    } else {
+                        alerta("Error", data.msn, "danger");
+
+                    }
+
+
+
+
+                },
+                error: function () {
+
+                    alerta("Error", "Error al Grabar", "danger");
+
+                },
+                complete: function () {
+
+                    //ocultamos los modales, los loadings y habilitamos botones
+
+                    //$('#confirmarBorrado').appendTo("body").modal('hide');
+                    $(".cargando").hide();
+                    $('.btn').removeAttr('disabled');
+                }
+
+            });
+        }
+
+    }
+</script>
+{% endblock %}

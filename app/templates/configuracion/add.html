@@ -1,0 +1,53 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Header  -->
+<div class="page-header">
+    <div class="row align-items-end">
+        <div class="col-sm mb-2 mb-sm-0">
+            <h1 class="page-header-title">
+                {{extras.accion}} Configuración
+            </h1>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" action="" id="admin-form" class="js-validate">
+            <div class="row">
+                <div class="col-mb-6 col-lg-6">
+                    <div>
+                        <label class="form-label" for="useremail">Nombre</label>
+                        <input class="form-control form-control-lg" name="nombre" id="nombre" aria-label="nombre"
+                            value="{{ configuracion.nombre }}" required>
+                    </div>
+                </div>
+                <div class="col-mb-6 col-lg-6">
+                    <label for="valor" class="form-label">Valor</label>
+
+                    <div>
+                        {% if 'password' in configuracion.nombre %}
+                        <input type="password" class="form-control  form-control-lg" id="valor" name="valor"
+                            value="{{ configuracion.valor if objeto != None }}">
+                        {% else %}
+                        <input type="text" class="form-control  form-control-lg" id="valor" name="valor"
+                            value="{{ configuracion.valor if objeto != None }}">
+                        {% endif %}
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="my-3">
+                <a type="submit" href="{{ url_for('configuracion.configuracion_index')}}"
+                    class="btn btn-secondary btn-sm">Cancelar</a>
+                <button type="submit" class="btn btn-primary btn-sm">Aceptar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

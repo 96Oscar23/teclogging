@@ -1,0 +1,58 @@
+<br>
+<br>
+<div id=":67" class="Am Al editable Xp0HJf-LW-avf" hidefocus="true" aria-label="Firma" g_editable="true" role="textbox" contenteditable="true" style="direction: ltr;">
+   <div class="gmail_signature" data-smartmail="gmail_signature">
+      <div dir="ltr">
+         <table border="0" cellspacing="0" cellpadding="0" width="485" style="font-size:small;width:485px">
+            <tbody>
+               <tr valign="top">
+                  <td style="width:10px;padding-right:10px">
+                     <img src="https://ci6.googleusercontent.com/proxy/PUkQoKQvklBTQae6a7P01nRCrPHtjIaOjhReKjeM2zqGjKlRHw8PrBNYURheKYA7LJ-7K5G-aQNlvLlCjfBge6f7C4nnBe2qeNslQSuUhCb97wcb6AWlYUEN8UVwCeNOiVMvX_2mIXnaqt0tS8pH8Vpp2dz4jugDF7FY-fz8TQ5UYLU_f37d_tX6pPKMzC0SexcFmQBGl4ozP9I=s0-d-e1-ft#https://docs.google.com/uc?export=download&amp;id=0B-tjJbOur1FbM05jTFllVEhYYXc&amp;revid=0B-tjJbOur1FbUitpL29PNno1ZnJRSHY1TlN3Z085REg1QldBPQ" width="70" height="96">
+                  </td>
+                  <td style="border-right:1px solid rgb(69,102,142)"/>
+                  <td style="font-family:Arial;display:inline-block;text-align:initial;font-stretch:normal;font-size:12px;line-height:normal;color:rgb(100,100,100);padding:0px 10px">
+                     <table border="0" cellspacing="0" cellpadding="0">
+                        <tbody>
+                           <tr>
+                              <td style="font-family:Arial;display:inline-block;text-align:initial;font-stretch:normal;line-height:normal">
+                                 <b>Service Desk</b>
+                                 <br>
+                                 <span style="display:inline-block">Service Desk</span>,&nbsp;
+                                 <span style="display:inline-block">Amauta Consulting</span>&nbsp;
+                              </td>
+                           </tr>
+                           <tr>
+                              <td style="font-family:Arial;font-stretch:normal;line-height:normal;color:rgb(141,141,141);padding:5px 0px">
+                                 <span style="display:inline-block">
+                                 <a href="tel:8115317989" style="color:rgb(141,141,141);display:inline-block;text-decoration:none" target="_blank">8115317989</a>
+                                 </span>&nbsp;<span style="color:rgb(69,102,142);display:inline-block">|</span>&nbsp;<span style="display:inline-block">
+                                 <a href="mailto:service.desk@amauta.com.mx" target="_blank">service.desk@amauta.com.mx</a>
+                                 </span>&nbsp;<span style="color:rgb(69,102,142);display:inline-block">|</span>&nbsp;<span style="white-space:nowrap;display:inline-block">
+                                 <a href="http://amauta.com.mx/" rel="nofollow" style="color:rgb(141,141,141);display:inline-block;text-decoration:none" target="_blank">amauta.com.mx</a>
+                                 </span>
+                                 <span style="color:rgb(69,102,142);display:inline-block">
+                                 <br>
+                                 </span>
+                                 <span style="display:inline-block">Monterrey, N.L.</span>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td style="margin-top:5px">
+                                 <a href="http://facebook.com/amautaconsulting" style="color:rgb(255,255,255)" target="_blank">
+                                 <img width="16" height="16" src="https://ci5.googleusercontent.com/proxy/3ysP8__nmWC9GvjgQNYVHuKPnV4833DimOf3V-9WwOjwWDwaMMJkSo3gzm8VX1rwE6U1FQXgPgrIqK9T4LfTRK7Fspwn4S4t3Eqf518VBRs6bhaAb0cZUXU=s0-d-e1-ft#https://s3.amazonaws.com/images.wisestamp.com/icons_32/facebook.png" alt="Facebook" style="border-radius:0px;border:0px;width:16px;height:16px">
+                                 </a>&nbsp;<a href="https://www.linkedin.com/in/amautaconsulting" style="color:rgb(255,255,255)" target="_blank">
+                                 <img width="16" height="16" src="https://ci4.googleusercontent.com/proxy/SOGJyqe3XDVibRzjS7kIHMn0wxxN3gs6crnc5Tyx_rwYx-zapJaZ4W51mHXzz9XLp8D81kuRx4tU16AE-zG90B7FYe1huMd2_6tJGBkGoKZ7AwNkRe4w9zk=s0-d-e1-ft#https://s3.amazonaws.com/images.wisestamp.com/icons_32/linkedin.png" alt="Linkedin" style="border-radius:0px;border:0px;width:16px;height:16px">
+                                 </a>&nbsp;<a href="https://twitter.com/AmautaConsulti" style="color:rgb(255,255,255)" target="_blank">
+                                 <img width="16" height="16" src="https://ci5.googleusercontent.com/proxy/wfND7YmOcmmmhOcWnAPwzldxiMKDQ0ZEH6B-aWTFmrHOM7uUt_zexgy5VYhiDKUmN7gAtJgoPUDvSICfZQKQOBkQqNGLKd6PQ2BgY9m4Yof9YUb5x3JnYA=s0-d-e1-ft#https://s3.amazonaws.com/images.wisestamp.com/icons_32/twitter.png" alt="Twitter" style="border-radius:0px;border:0px;width:16px;height:16px">
+                                 </a>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>

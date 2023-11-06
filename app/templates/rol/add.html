@@ -1,0 +1,127 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Header  -->
+<div class="page-header">
+    <div class="row align-items-end">
+        <div class="col-sm mb-2 mb-sm-0">
+
+
+            <h1 class="page-header-title">
+                {{extras.accion}} Rol
+            </h1>
+        </div>
+
+
+
+    </div>
+
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-body">
+        <form method="post" action="" id="admin-form" class="js-validate">
+            <div class="row">
+                <div class="col-mb-12 col-lg-12">
+                    <div>
+                        <label class="form-label" for="useremail">Nombre</label>
+                        <input class="form-control form-control-lg" name="nombre" id="nombre" aria-label="nombre"
+                            value="{{ rol.nombre }}" required>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    {% if rol.id != None %}
+                    <input type="hidden" id="rolid" value="{{rol.id}}" />
+                    <div class="section-divider mv10">
+                        <span>Permisos</span>
+                    </div>
+
+                    <div class="x_content">
+                        <div class="table-responsive">
+                            <table class="table table-striped jambo_table bulk_action smalltable">
+                                <thead>
+                                    <tr class="headings">
+
+                                        <th class="column-title">Opción </th>
+                                        <th class="column-title">Descripción </th>
+                                        <th class="column-title no-link last no-sort">Acceso</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for opciones in opciones%}
+
+                                    <tr>
+                                        <td>{{ opciones.opcionpadre }}</td>
+                                        <td>{{opciones.descripcion if opciones.descripcion!=None}}</td>
+                                        <td>
+                                            <input type="checkbox" {{ 'checked' if opciones.rolid !=None }}
+                                                id="acceso_{{ opciones.id }}"
+                                                onclick="agregarpermiso('{{ opciones.id }}',this)" />
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    {%endif%}
+                </div>
+            </div>
+
+            <div class="my-3">
+                <a type="submit" href="{{ url_for('rol.rol_index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
+                <button type="submit" class="btn btn-primary btn-sm">Aceptar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+    function agregarpermiso(menuid, c) {
+        rolid = $("#rolid").val();
+        valor = $(c).is(":checked");
+        permiso = 0;
+        if (valor == true)
+            permiso = 1;
+        else
+            permiso = 0;
+        $.ajax({
+            url: "/seguridad/agregar/" + rolid + "/menuid/" + menuid + "/permiso/" + permiso,
+            type: "POST",
+            dataType: "json",
+            success: function (msg) {
+
+                if (msg.estatus == 'error') {
+                    if (valor)
+                        $(c)[0].checked = false;
+                    else
+                        $(c)[0].checked = true;
+
+                }
+                else {
+                    alerta('Aviso', 'Permiso actualizado con éxito', 'success');
+
+                }
+            },
+            error: function (result) {
+                alerta('Aviso', 'Error al guardar información', 'danger');
+
+                if (valor)
+                    $(c)[0].checked = false;
+                else
+                    $(c)[0].checked = true;
+            }
+        });
+
+    }
+
+</script>
+{% endblock %}

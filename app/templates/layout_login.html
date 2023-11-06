@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required Meta Tags Always Come First -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Login</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename = 'assets/img/favicon.ico' ) }}">
+
+    
+    <!-- CSS Implementing Plugins -->
+    <link rel="stylesheet" href="/static/assets/vendor/bootstrap-icons/font/bootstrap-icons.css">
+
+    <!-- CSS Front Template -->
+    <link rel="preload" href="/static/assets/css/theme.min.css" data-hs-appearance="default" as="style">
+    <link rel="preload" href="/static/assets/css/theme-dark.min.css" data-hs-appearance="dark" as="style">
+
+   
+
+    <link rel="stylesheet" href="/static/custom.css">
+
+    <style data-hs-appearance-onload-styles>
+        * {
+            transition: unset !important;
+        }
+
+        body {
+            opacity: 0;
+        }
+    </style>
+
+    <script src="/static/generalsestilo.js"></script>
+    
+
+    <script src="/static/assets/js/hs.theme-appearance.js"></script>
+
+</head>
+
+<body>
+  
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main id="content" role="main" class="main">
+
+        <div class="position-fixed top-0 end-0 start-0 bg-img-start"
+            style="height: 32rem; background-image: url( {{ url_for('static', filename = 'assets/svg/components/card-6.svg' ) }}) ;">
+            <!-- Shape -->
+            <div class="shape shape-bottom zi-1">
+                <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                    viewBox="0 0 1921 273">
+                    <polygon fill="#fff" points="0,273 1921,273 1921,0 " />
+                </svg>
+            </div>
+            <!-- End Shape -->
+        </div>
+
+        <!-- Content -->
+        <div class="container py-5 py-sm-7">
+
+            <div class="d-flex justify-content-center" href="">
+                <img class="zi-2 m-2 img-responsive" src="/static/assets/img/logo.png" alt="Image Description" height="200px">
+            </div>
+
+            <div class="mx-auto" style="max-width: 30rem;">
+                <!-- Card -->
+                <div class="card card-lg mb-5">
+                    <div class="card-body">
+                        <div>
+                            {% with messages = get_flashed_messages(with_categories = True) %}
+                            {% if messages %}
+
+                            
+                            
+                            {% for category, message in messages %}
+                            <input type="hidden" id="div_error" name="div_error" value="{{message}}" />
+                            
+                           
+                            {% endfor %}
+                            {% endif %}
+                            {% endwith %}
+                        </div>
+                        <!-- Form -->
+
+                        <div id="liveToast" class="position-fixed toast hide" role="alert" aria-live="assertive" aria-atomic="true" style="top: 20px; right: 20px; z-index: 1000;">
+                            <div class="toast-header">
+                              <div class="d-flex align-items-center flex-grow-1">
+                                <div class="flex-shrink-0">
+                                  
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                  <h5 class="mb-0" id="alerta_titulo"></h5>
+                                  
+                                </div>
+                                <div class="text-end">
+                                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="toast-body" id="alerta_body">
+                              
+                            </div>
+                        </div>
+
+
+                        <form method="POST" class="js-validate needs-validation" novalidate>
+                            <input type="hidden" id="offset" name="offset" />
+                            <div class="text-center">
+                                <div class="mb-5">
+                                    <h1 class="display-5">{{ extras.titulo }}</h1>
+                                </div>
+                            </div>
+                            <div>
+                                {% block content %}
+                                    
+                                {% endblock %}
+                            </div>
+                        </form>
+
+                        <!-- End Form -->
+                    </div>
+                </div>
+                <!-- End Card -->
+
+                <!-- Footer -->
+                <!-- End Footer -->
+            </div>
+        </div>
+        <!-- End Content -->
+    </main>
+    <!-- ========== END MAIN CONTENT ========== -->
+
+    <!-- JS Global Compulsory  -->
+
+<script src="/static/assets/vendor/jquery/dist/jquery.min.js"></script>
+<script src="/static/assets/vendor/jquery-migrate/dist/jquery-migrate.min.js"></script>
+<script src="/static/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- JS Implementing Plugins -->
+<script src="/static/assets/vendor/hs-toggle-password/dist/js/hs-toggle-password.js"></script>
+<script src="/static/assets/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+
+<script src="/static/assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
+
+<!-- JS Front -->
+<script src="/static/assets/js/theme.min.js"></script>
+<script src="/static/validaciones.js"></script>
+<script src="/static/generals.js"></script>
+<!-- JS Plugins Init. -->
+{% block script %}
+    
+{% endblock %}
+
+</body>
+
+</html>

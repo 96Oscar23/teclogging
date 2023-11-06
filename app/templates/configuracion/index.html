@@ -1,0 +1,97 @@
+﻿{% extends "base.html" %}
+
+{% block button %}
+
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header bg-light">
+        <div class="row align-items-center">
+
+            <!-- Titulo y boton + -->
+            <div class="col">
+                <h1 class="page-header-title">{{extras.titulo}}
+                    <a class="btn btn-primary btn-xs" href="{{ url_for('configuracion.configuracion_add') }}">
+                        <i class="bi-plus"></i>
+                    </a>
+                </h1>
+            </div>
+            <div class="col-auto" id="tabla1Header">
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="card-body">
+        <!-- Tabla -->
+        <div class="table-responsive datatable-custom">
+            <table id="datatable"
+                class="table table-borderless table-striped table-thead-bordered table-nowrap table-hover">
+                <thead>
+                    <tr class="bg-dark">
+                        <th class="text-white">Configuración</th>
+                        <th class="text-white">Valor</th>
+                        <th class="no-link last no-sort columna-bototnes"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for objeto in configuraciones %}
+                    <tr>
+                        <td>{{ objeto.nombre }}</td>
+                        {% if "password" in objeto.nombre %}
+                        <td>******</td>
+                        {% else %}
+                        <td>{{ objeto.valor }}</td>
+                        {% endif %}
+                        <td>
+                            <div class="btn-group">
+                                <a href="{{ url_for('configuracion.configuracion_update', id = objeto.uuid) }}"
+                                    type="button" class="btn btn-primary btn-xs">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#confirmarBorrado" type="button"
+                                    objetoid="{{objeto.uuid}}" objeto="{{extras.objeto}}" nombre="{{objeto.nombre}}"
+                                    class="btn btn-danger btn-xs btn-borrado">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+  
+
+
+    <!-- Num Registros y paginacion -->
+    <div class="card-footer">
+        <div id="tabla1Footer">
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
+<script>
+    jQuery(document).ready(function () {
+        iniciarTabla("#tabla1Header", "datatable", "#tabla1Footer");
+    });
+</script>
+{% endblock %}

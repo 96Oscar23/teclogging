@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['TOKEN_EXP_TIME'] = 86400      
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"pool_pre_ping": True}
 app.secret_key="fheijeiojfeE!#!"
-app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql://serviciosnlweb:29y$<7$N<wI.@164.92.223.239:5432/serviciosnlweb' #desarrollo
+app.config['SQLALCHEMY_DATABASE_URI']= 'postgresql://teclogging:zr{X7!16@104.248.201.207:5432/teclogging' #desarrollo
 
 
 app.config['SECRET_KEY'] = 'Lfofeoje8e#3!&'
@@ -58,7 +58,7 @@ auth = HTTPBasicAuth()
 db = SQLAlchemy(app)
 migrate = Migrate()
 
-db.init_app(app)
+#db.init_app(app)
 migrate = Migrate(app, db)
 
 app.jinja_env.globals['momentjs'] = momentjs
