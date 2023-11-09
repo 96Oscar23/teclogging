@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 
-
-
 {% block content %}
 
 <style>
@@ -15,52 +13,337 @@
         color: #fff;
         text-align: center;
         line-height: 40px;
-        margin: 5px;
+        width: 100%;
+        border: #1c5074 1px solid;
+    }
+
+    .form-control {
+        width: 100%;
+    }
+
+    .handle {
         cursor: grab;
+    }
+
+    .error {
+        border: red 1px solid;
+
+    }
+
+    .vacio {
+        color: black;
+        margin-left: 5px;
+    }
+
+    .iconos {
+        justify-content: center;
+        align-items: center;
     }
 </style>
 
-
 <div class="card">
-
     <div class="card-header bg-light">
-
         <div class="row align-items-center">
             <div class="col">
-                <h1 class="page-header-title">Tipo Datos
-                    <!-- <a class="btn btn-primary btn-xs" >
-                        <i class="bi-plus"></i>
-                    </a> -->
-                </h1>
-
+                <h1 class="page-header-title">Tipo Datos</h1>
             </div>
         </div>
     </div>
-
     <div class="card-body">
+        <h1>Arrastra y Suelta
+            <button class="btn btn-primary btn-xs" onclick="add_dato()"><i class="bi-plus"></i>Dato</button>
+        </h1>
 
-        <h1>Arrastra y Suelta</h1>
+        <div class="iconos"></div>
         <ul id="sortable-list">
-            <li class="sortable-item">Elemento 1</li>
-            <li class="sortable-item">Elemento 2</li>
-            <li class="sortable-item">Elemento 3</li>
-            <li class="sortable-item">Elemento 4</li>
         </ul>
+        <button class="btn btn-primary btn-xs" onclick="save()">Guardar</button>
     </div>
-
 </div>
 
 {% endblock %}
 
-
 {% block script %}
-
 <script>
 
     jQuery(document).ready(function () {
-        $("#sortable-list").sortable();
+        get_selects()
+        $("#sortable-list").sortable({
+            "handle": ".handle",
+            "group": "sortable-list",
+            update: function (/**Event*/evt) {
+                calcular_bits();
+            }
+        });
         $("#sortable-list").disableSelection();
-    })
+
+        $(document).on("change", ".metricas", function () {
+            cambiar_longitud($(this));
+        });
+
+        $(document).on("change", ".bit", function () {
+            calcular_bits();
+        });
+    });
+
+    var metricas;
+    var colores = [];
+
+    function add_dato(defaults = null) {
+
+        var selects;
+        let longitud;
+        let bit;
+
+        let temp = metricas[0].longitud;
+
+        if (defaults == null) {
+            selects = generar_selects();
+            longitud = `<input type="number" value="${temp}" placeholder="Longitud" class="form-control" disabled>`;
+            bit = `<input type="number" value="" placeholder="Bit" class="form-control bit" min="0">`;
+        } else {
+            selects = generar_selects(defaults.selects);
+            longitud = metricas.find(function (elemento) {
+                return elemento.id == defaults.selects.metrica;
+            }).longitud;
+            longitud = `<input type="number" value="${longitud}" placeholder="Longitud" class="form-control" disabled>`;
+            bit = `<input type="number" value="${defaults.bit}" placeholder="Bit" class="form-control bit" min="0">`;
+        }
+
+        let color = getRandomColor();
+
+        $("#sortable-list").append(`<li class="sortable-item dato" color="${color}">
+            <div class="row">
+                <div class="col-md-1">
+                    <i class="bi bi-square-fill" style="color:${color};"></i>
+                </div>
+                <div class="col-md-4">
+                    ${selects}
+                </div>
+                <div class="col-md-3 longitud">
+                    ${longitud}
+                </div>
+                <div class="col-md-3">
+                    ${bit}
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-danger btn-xs" onclick="eliminar($(this))"><i class="bi-trash"></i></i></button>
+                </div>
+            </div>
+        </li>`);
+
+        calcular_bits();
+    }
+
+    function get_selects() {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: "/tipodato/select",
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    metricas = data.data.metricas;
+                    //generar_default();
+                    //calcular_bits();
+                    resolve();
+                },
+                error: function (error) {
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    function cambiar_longitud(element) {
+        let longitud = metricas.find(function (elemento) {
+            return elemento.id == element[0].value;
+        }).longitud;
+        element.closest('.sortable-item').find(".longitud input").val(longitud);
+    }
+
+
+    function generar_selects(defaults = null) {
+        var opciones_metricas = "";
+
+        if (defaults == null) {
+            metricas.forEach(function (element) {
+                opciones_metricas += `<option value="${element.id}">${element.nombre}</option>`;
+            });
+        } else {
+            metricas.forEach(function (element) {
+                if (element.id == defaults.metrica) {
+                    opciones_metricas += `<option value="${element.id}" selected>${element.nombre}</option>`;
+                } else {
+                    opciones_metricas += `<option value="${element.id}">${element.nombre}</option>`;
+                }
+            });
+        }
+
+        var select_metricas = `<select class="form-control metricas">${opciones_metricas}</select>`;
+
+        return select_metricas
+    }
+
+    function eliminar(element) {
+        element.closest('.sortable-item').remove();
+        calcular_bits();
+    }
+
+    function calcular_bits() {
+        const MAX_BITS = 100;
+        let temp = [];
+        temp.length = MAX_BITS;
+        var bit_list = [];
+        var bit_total = [];
+        let bits_ordenados = [];
+        let rango_maximo = 0;
+        $(".dato").each(function (index, element) {
+            let bit = $(element).find(".bit").val();
+            let longitud = $(element).find(".longitud input").val();
+            let metrica = $(element).find(".metricas").val();
+            bit = parseInt(bit);
+            metrica = parseInt(metrica);
+            longitud = parseInt(longitud);
+            let rango = longitud + bit + 1;
+            if (bit !== "") {
+                bit_list.push({
+                    bit: bit,
+                    longitud: longitud,
+                    metrica: metrica,
+                    rango: rango
+                });
+
+                let posible = true
+                let ocupadas = 0;
+
+                for (let i = bit; i < rango; i++) {
+                    if (temp[i] != undefined) {
+                        posible = false;
+                        ocupadas++;
+                        break;
+                    }
+                    if (rango_maximo < rango) {
+                        rango_maximo = rango;
+                    }
+                }
+
+                if (posible == true) {
+                    for (let i = bit; i < rango; i++) {
+                        temp[i] = {
+                            metrica: metrica,
+                            elemento: element,
+                        };
+                    }
+                    $(element).find(".bit").removeClass("error");
+                } else {
+                    $(element).find(".bit").val("");
+                    $(element).find(".bit").addClass("error");
+                }
+            }
+        });
+
+        $(".iconos").html("");
+
+        for (let i = 0; i < rango_maximo; i++) {
+            if (temp[i] != undefined) {
+                agregar_iconos(temp[i].elemento);
+            } else {
+                agregar_iconos();
+            }
+
+        }
+    }
+
+    function agregar_iconos(element) {
+        let iconos = ""
+        let color = $(element).attr("color");
+
+        if (element != undefined) {
+            iconos += `<i class="bi bi-square-fill" style="color:${color}; margin-left: 5px;"></i>`
+        } else {
+            iconos += `<i class="bi bi-square-fill vacio"></i>`
+        }
+        $(".iconos").append(iconos);
+    }
+
+
+    /* function generar_default() {
+        let datos = []
+
+        datos.push({
+            selects: {
+                metrica: 1,
+            },
+            bit: 0
+        });
+
+        datos.push({
+            selects: {
+                metrica: 2,
+            },
+            bit: 3
+        });
+
+        datos.push({
+            selects: {
+                metrica: 3,
+            },
+            bit: 7
+        });
+
+        datos.forEach(function (element) {
+            add_dato(element);
+        });
+    } */
+
+
+    function save() {
+        let datos = [];
+        $(".dato").each(function (index, element) {
+            let bit = $(element).find(".bit").val();
+            let metrica = $(element).find(".metricas").val();
+            bit = parseInt(bit);
+            metrica = parseInt(metrica);
+            datos.push({
+                bit: bit,
+                metrica: metrica
+            });
+        });
+
+        $.ajax({
+            url: "/tipodato/save",
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({
+                datos: datos
+            }),
+            success: function (data) {
+                window.location.href = "/tipodato";
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function getRandomColor() {
+        // Genera valores aleatorios para R, G y B en el rango de 0 a 255
+        var r = Math.floor(Math.random() * 256);
+        var g = Math.floor(Math.random() * 256);
+        var b = Math.floor(Math.random() * 256);
+
+        // Crea una cadena RGB válida
+        var color = 'rgb(' + r + ',' + g + ',' + b + ')';
+
+        if (colores.includes(color)) {
+            color = getRandomColor();
+        } else {
+            colores.push(color);
+        }
+
+        return color;
+    }
 
 </script>
 

@@ -37,7 +37,7 @@ def menu_index ():
     .with_entities(Menu.uuid,Menu.nombre,opcionpadre.nombre.label("opcionpadre"))\
     .filter(Menu.deleted==False)\
     .outerjoin(opcionpadre,opcionpadre.id==Menu.opcionpadreid)\
-    .order_by(case([(Menu.opcionpadreid==None,0)],else_=1),opcionpadre.orden,Menu.nombre).all()
+    .order_by(case((Menu.opcionpadreid==None,0),else_=1),opcionpadre.orden,Menu.nombre).all()
     
 
     return render_template('/menu/index.html', menus=menus, extras=extras)

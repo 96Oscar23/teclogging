@@ -80,7 +80,7 @@ def acepta_login(user):
     session['roluuid'] = rol_tab.uuid
     iniciales = user.nombre[0].upper()
     session['iniciales'] = iniciales
-    session['empresa'] = "Servicios N.L."
+    session['empresa'] = "Teclogging"
 
     if 'menuestado' not in session:
         session['menuestado'] = 1

@@ -162,16 +162,16 @@ class TipoFuenteDato(db.Model):
     fecha_creacion = Column(
         db.TIMESTAMP, server_default=db.func.current_timestamp())
     deleted = Column(db.Boolean, server_default='0', default=False)
-    tipodato = Column(db.Integer, db.ForeignKey(
-        'tipodato.id'), nullable=True)
-    tipodatoid = relationship("TipoDato", foreign_keys=[tipodato])
+    fuentedato = Column(db.Integer, db.ForeignKey(
+        'fuentedato.id'), nullable=True)
+    fuentedatoid = relationship("FuenteDato", foreign_keys=[fuentedato])
 
-    def __init__(self, nombre, codigo, direccion, puerto, tipodatoid):
+    def __init__(self, nombre, codigo, direccion, puerto, fuentedatoid):
         self.nombre = nombre
         self.codigo = codigo
         self.direccion = direccion
         self.puerto = puerto
-        self.tipodatoid = tipodatoid
+        self.fuentedatoid = fuentedatoid
 
     def add(self, tipofuentedato):
         db.session.add(tipofuentedato)
@@ -184,13 +184,10 @@ class TipoFuenteDato(db.Model):
         db.session.delete(tipofuentedato)
         return session_commit()
 
-# *
-
-
-class TipoDato(db.Model):
-    __tablename__ = 'tipodato'
+# *FuenteDato
+class FuenteDato(db.Model):
+    __tablename__ = 'fuentedato'
     id = Column(db.Integer, primary_key=True)
-
     uuid = db.Column(UUID(as_uuid=True), unique=True,
                      server_default=sqlalchemy.text("uuid_generate_v4()"))
     nombre = Column(db.String(255), nullable=False)

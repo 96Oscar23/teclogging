@@ -19,6 +19,7 @@ def usuario_index():
     # SEGURIDAD
     usuario = g.user
     permisos = views.regresaPermisos(inspect.currentframe().f_code.co_name)
+    print("permisos: ", permisos)
     if permisos == '':
         return render_template('dashboard.html')
 
@@ -257,7 +258,7 @@ def api_usuario_buscar():
     texto = "%"+texto+"%"
     texto = texto.lower()
 
-    #consultamos el rol cuadrilla.
+    # consultamos el rol cuadrilla.
     rol = Rol.query.filter(and_(Rol.deleted == False, Rol.id == 2)).first()
 
     if rol == None:
@@ -268,9 +269,8 @@ def api_usuario_buscar():
     usuarios = Usuario.query.filter(and_(Usuario.deleted == False), or_(func.lower(Usuario.nombre).like(
         texto), func.lower(Usuario.correo).like(texto))).order_by(Usuario.nombre)
 
-    
     if rol_cuadrilla == '2':
-        usuarios = usuarios.filter(Usuario.rolid==rol.id).all()
+        usuarios = usuarios.filter(Usuario.rolid == rol.id).all()
     else:
         usuarios = usuarios.all()
     list_usuarios = []
