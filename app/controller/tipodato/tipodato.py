@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from app import app, auth, views
 import inspect
-from app.model import db, TipoVariable, Metrica, TipoFuenteDatoMapa, TipoDato
+from app.model import db, TipoVariable, Metrica, TipoFuenteDatoMapa
 from flask import render_template, flash, request, redirect, url_for, g, jsonify
 from flask import Blueprint
 

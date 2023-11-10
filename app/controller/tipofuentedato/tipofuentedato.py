@@ -6,7 +6,7 @@ from flask import Blueprint
 from app.model import db,Menu
 from sqlalchemy import desc, or_, and_, func, event, extract, literal_column, case, Integer, distinct, cast, not_, asc
 from sqlalchemy.orm import aliased
-from app.model import db, Tipofuentedato
+from app.model import db
 
 
 tipofuentedato = Blueprint('tipofuentedato', __name__,
